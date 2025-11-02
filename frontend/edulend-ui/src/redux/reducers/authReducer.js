@@ -3,6 +3,8 @@ import {
   REGISTER_USER_FAILURE,
   LOGIN_USER_SUCCESS,
   LOGIN_USER_FAILURE,
+  REGISTER_USER,
+  LOGIN_USER,
 } from '../constants/actionsTypes';
 
 const initialState = {
@@ -14,8 +16,9 @@ const initialState = {
 
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
-    case 'REGISTER_USER':
-    case 'LOGIN_USER':
+    case REGISTER_USER:
+      return { ...state, loading: true, error: null };
+    case LOGIN_USER:
       return { ...state, loading: true, error: null };
 
     case REGISTER_USER_SUCCESS:
@@ -25,7 +28,7 @@ const authReducer = (state = initialState, action) => {
       return { ...state, token: action.payload.token, loading: false };
 
     case REGISTER_USER_FAILURE:
-            return { ...state, loading: false };
+      return { ...state, loading: false };
     case LOGIN_USER_FAILURE:
       return { ...state, loading: false, error: action.payload };
 

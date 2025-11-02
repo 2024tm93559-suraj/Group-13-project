@@ -19,7 +19,14 @@ const LoginForm = () => {
   };
 
   return (
-    <div className="d-flex align-items-center justify-content-center vh-100 bg-light">
+    <div className="d-flex align-items-center justify-content-center vh-100 bg-light"
+     style={{
+      backgroundImage:
+        "url('https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=1740&q=80')",
+      backgroundSize: "cover",
+      backgroundPosition: "center",
+    }}
+    >
       <div
         className="card shadow p-4"
         style={{ width: "400px", borderRadius: "15px" }}

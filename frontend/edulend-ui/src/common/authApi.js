@@ -7,7 +7,7 @@ import {
     transformLoginResponse,
 } from '../common/transformers/authTransformer';
 
-const API_BASE_URL = 'https://your-backend.com/api/auth';
+const API_BASE_URL = 'https://localhost:5001/api/auth/';
 
 export const AuthAPI = {
     register: async (payload) => {

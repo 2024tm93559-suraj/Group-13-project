@@ -7,6 +7,7 @@ import axios, { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
 
 // Common Modules
 import { sessionStore } from './storage';
+import { API_BASE_URL } from '../config/env';
 
 // Constants
 const DEFAULT_TIMEOUT = 300000; // Default timeout of 5 minutes
@@ -49,8 +50,9 @@ const httpError = (error) => {
  * @param {number} [timeout=DEFAULT_TIMEOUT] - Timeout in milliseconds
  * @returns {AxiosInstance} Axios instance configured with the given timeout and default headers
  */
-export const httpRequest = (timeout = DEFAULT_TIMEOUT)=> {
+export const httpRequest = (timeout = DEFAULT_TIMEOUT) => {
   const axiosInstance = axios.create({
+    baseURL: API_BASE_URL,
     timeout,
     headers: {
       'Content-Type': 'application/json',
