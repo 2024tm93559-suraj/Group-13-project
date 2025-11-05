@@ -1,33 +1,50 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { registerUser } from "../redux/actions/authActions";
-import { Link } from "react-router-dom";
-
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser, registerUser } from "../redux/actions/authActions";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 const SignupForm = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
     role: "",
   });
+  const auth = useSelector((state) => state.auth);
+  useEffect(() => {
+    if (auth.user && auth.token) {
+      navigate("/equipment");
+    }
+  }, [auth.user, auth.token]);
+
+  useEffect(() => {
+    if (auth.user && !auth.token) {
+      dispatch(
+        loginUser({ email: formData.email, password: formData.password })
+      );
+      toast.success("Signup successful! Logging you in...");
+    }
+  }, [auth.user]);
 
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
+
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(registerUser(formData));
   };
 
   return (
-    <div className="d-flex align-items-center justify-content-center vh-100 bg-light"
-     style={{
-      backgroundImage:
-        "url('https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=1740&q=80')",
-      backgroundSize: "cover",
-      backgroundPosition: "center",
-    }}
-    
+    <div
+      className="d-flex align-items-center justify-content-center vh-100 bg-light"
+      style={{
+        backgroundImage:
+          "url('https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=1740&q=80')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
     >
       <div
         className="card shadow p-4"

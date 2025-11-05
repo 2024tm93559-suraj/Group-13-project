@@ -1,3 +1,4 @@
+// src/store/epics/authEpics.js
 import { ofType, combineEpics } from 'redux-observable';
 import { from, of } from 'rxjs';
 import { mergeMap, map, catchError } from 'rxjs/operators';
@@ -11,33 +12,30 @@ import {
   loginSuccess,
   loginFailure,
 } from '../actions/authActions';
-import { httpRequest } from '../../common/connector/http';
+import { AuthAPI } from '../../common/authApi';
 
 // ✅ Register Epic
 const registerEpic = (action$) =>
   action$.pipe(
     ofType(REGISTER_USER),
-    mergeMap((action) => {
-      const api = httpRequest();
-      return from(api.post('/api/auth/register', action.payload)).pipe(
-        map((response) => registerSuccess(response.data)),
-        catchError((error) => of(registerFailure(error.message)))
-      );
-    })
+    mergeMap((action) =>
+      from(AuthAPI.register(action.payload)).pipe(
+        map((response) => registerSuccess(response)),
+        catchError((error) => of(registerFailure(error)))
+      )
+    )
   );
 
 // ✅ Login Epic
 const loginEpic = (action$) =>
   action$.pipe(
     ofType(LOGIN_USER),
-    mergeMap((action) => {
-      const api = httpRequest();
-      return from(api.post('/api/auth/login', action.payload)).pipe(
-        map((response) => loginSuccess(response.data)),
-        catchError((error) => of(loginFailure(error.message)))
-      );
-    })
+    mergeMap((action) =>
+      from(AuthAPI.login(action.payload)).pipe(
+        map((response) => loginSuccess(response)),
+        catchError((error) => of(loginFailure(error)))
+      )
+    )
   );
 
-// ✅ Combine them
 export const authEpics = combineEpics(registerEpic, loginEpic);

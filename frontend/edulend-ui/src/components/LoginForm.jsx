@@ -1,12 +1,21 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { loginUser } from "../redux/actions/authActions";
 
 const LoginForm = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const auth = useSelector((state) => state.auth);
   const [credentials, setCredentials] = useState({
     email: "",
     password: "",
   });
-
+  useEffect(() => {
+    if (auth.token) {
+      navigate("/equipment");
+    }
+  }, [auth.token]);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setCredentials((prev) => ({ ...prev, [name]: value }));
@@ -15,17 +24,18 @@ const LoginForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Login details:", credentials);
-    // Add your login API logic here
+    dispatch(loginUser(credentials));
   };
 
   return (
-    <div className="d-flex align-items-center justify-content-center vh-100 bg-light"
-     style={{
-      backgroundImage:
-        "url('https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=1740&q=80')",
-      backgroundSize: "cover",
-      backgroundPosition: "center",
-    }}
+    <div
+      className="d-flex align-items-center justify-content-center vh-100 bg-light"
+      style={{
+        backgroundImage:
+          "url('https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=1740&q=80')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
     >
       <div
         className="card shadow p-4"
