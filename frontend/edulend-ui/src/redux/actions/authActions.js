@@ -5,6 +5,7 @@
     REGISTER_USER_FAILURE,
     LOGIN_USER_FAILURE,
     LOGIN_USER_SUCCESS,
+    LOGOUT_USER,
   } from '../constants/actionsTypes';
 
   // 🚀 These are plain object actions — redux-observable can listen to them
@@ -37,4 +38,8 @@
   export const loginFailure = (error) => ({
     type: LOGIN_USER_FAILURE,
     payload: error,
+  });
+
+    export const logoutUser = () => ({
+    type: LOGOUT_USER,
   });
