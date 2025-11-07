@@ -8,6 +8,9 @@ import AppNavbar from "./components/AppNavbar";
 import AddEquipmentForm from "./components/AddEquipmentForm";
 import Sidebar from "./components/Sidebar";
 import { useSelector } from "react-redux";
+import MyRequests from "./components/MyRequests";
+import ApproveRequests from "./components/ApproveRequests";
+
 
 // --- Layout for Login & Signup ---
 const AuthLayout = () => (
@@ -20,22 +23,33 @@ const AuthLayout = () => (
 );
 
 // --- Layout for Authenticated Users ---
-const MainLayout = () => (
-  <div className="app-wrapper d-flex">
-    <Sidebar />
-    <div className="content-wrapper flex-grow-1">
-      <AppNavbar />
-      <div className="equipment-dashboard p-3">
-        <Routes>
-          <Route path="/equipment" element={<Equipment />} />
-          <Route path="/add-equipment" element={<AddEquipmentForm />} />
-          {/* Default route inside authenticated area */}
-          <Route path="*" element={<Equipment />} />
-        </Routes>
+const MainLayout = () => {
+  const { user } = useSelector((state) => state.auth);
+  const isAdminOrStaff = user?.role === 'admin' || user?.role === 'staff';
+  return (
+    <div className="app-wrapper d-flex">
+      <Sidebar />
+      <div className="content-wrapper flex-grow-1">
+        <AppNavbar />
+        <div className="equipment-dashboard p-3">
+          <Routes>
+            <Route path="/equipment" element={<Equipment />} />
+            {isAdminOrStaff && (
+              <Route path="/approve-requests" element={<ApproveRequests />} />
+            )}
+
+            {/* Student Only Route */}
+            {user?.role === 'student' && (
+              <Route path="/my-requests" element={<MyRequests />} />
+            )}
+            <Route path="/add-equipment" element={<AddEquipmentForm />} />
+            {/* Default route inside authenticated area */}
+            <Route path="*" element={<Equipment />} />
+          </Routes>
+        </div>
       </div>
-    </div>
-  </div>
-);
+    </div>)
+};
 
 // --- Main App Component ---
 export default function App() {
