@@ -1,10 +1,9 @@
-// src/components/AppNavbar.jsx
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { logoutUser } from '../redux/actions/authActions';
-import NotificationBell from './NotificationBell'; // <-- 1. IMPORT
+
 
 const AppNavbar = () => {
   const dispatch = useDispatch();
@@ -30,9 +29,6 @@ const AppNavbar = () => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto align-items-center">
-            
-            {/* --- 2. ADD NOTIFICATION BELL --- */}
-            <NotificationBell />
             
             {/* Right-aligned dropdown */}
             <NavDropdown title={user.name || 'Profile'} id="basic-nav-dropdown" align="end" className="ms-2">

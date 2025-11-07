@@ -1,4 +1,3 @@
-// src/components/Sidebar.jsx
 import React from 'react';
 import { Nav } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
@@ -26,7 +25,6 @@ const Sidebar = () => {
           <HouseDoorFill /> Dashboard
         </Nav.Link>
         
-        {/* --- NEW: Role-based links --- */}
         {isStudent && (
           <Nav.Link as={NavLink} to="/my-requests">
             <CardChecklist /> My Requests
@@ -44,7 +42,6 @@ const Sidebar = () => {
             <PlusSquareFill /> Add Equipment
           </Nav.Link>
         )}
-        {/* --- END NEW --- */}
       </Nav>
     </div>
   );

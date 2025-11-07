@@ -1,8 +1,5 @@
-// src/common/requestApi.js
 import { httpRequest } from './connector/http';
-
 const API_PATH = '/api/requests';
-
 export const RequestAPI = {
   /**
    * Creates a new borrowing request.
@@ -34,8 +31,6 @@ export const RequestAPI = {
         const response = await client.get(API_PATH, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        // The backend controller populates 'equipment' but not 'user'
-        // We will need to fetch user details separately if needed, but for now this is fine
         resolve(response.data.data);
       } catch (error) {
         console.error('List Requests API Error:', error);
@@ -44,25 +39,25 @@ export const RequestAPI = {
     }),
 
   /**
-   * Approves or rejects a request.
+   * Updates the status of a request by calling the specific PATCH endpoint.
    * @param {string} id - The Request ID.
-   * @param {'approve' | 'reject'} action - The action to take.
+   * @param {'approve' | 'reject' | 'issue' | 'return'} action - The action to take.
    * @param {string} token
    */
-  approveOrReject: (id, action, token) =>
+  updateStatus: (id, action, token) =>
     new Promise(async (resolve, reject) => {
       try {
         const client = httpRequest();
-        const response = await client.post(
-          `${API_PATH}/${id}/approve`,
-          { action }, // Send { action: 'approve' } or { action: 'reject' } in the body
+        const response = await client.patch(
+          `${API_PATH}/${id}/${action}`,
+          {},
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        resolve(response.data.data); // Returns the updated request
+        resolve(response.data.data);
       } catch (error) {
-        console.error('Approve/Reject API Error:', error);
+        console.error(`Update Status (${action}) API Error:`, error);
         reject(error.response?.data || error.message);
       }
     }),

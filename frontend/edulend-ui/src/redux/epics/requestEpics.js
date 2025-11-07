@@ -1,4 +1,3 @@
-// src/redux/epics/requestEpics.js
 import { ofType, combineEpics } from 'redux-observable';
 import { from, of } from 'rxjs';
 import { mergeMap, map, catchError, withLatestFrom } from 'rxjs/operators';
@@ -43,6 +42,7 @@ const fetchRequestsEpic = (action$, state$) =>
     })
   );
 
+
 const updateRequestStatusEpic = (action$, state$) =>
   action$.pipe(
     ofType(UPDATE_REQUEST_STATUS),
@@ -50,7 +50,7 @@ const updateRequestStatusEpic = (action$, state$) =>
     mergeMap(([action, state]) => {
       const token = state.auth.token;
       const { id, action: reqAction } = action.payload;
-      return from(RequestAPI.approveOrReject(id, reqAction, token)).pipe(
+      return from(RequestAPI.updateStatus(id, reqAction, token)).pipe(
         map((response) => updateRequestStatusSuccess(response)),
         catchError((error) => of(updateRequestStatusFailure(error)))
       );

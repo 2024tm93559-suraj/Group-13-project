@@ -17,12 +17,10 @@ const AuthLayout = () => (
   <Routes>
     <Route path="/signup" element={<SignupForm />} />
     <Route path="/login" element={<LoginForm />} />
-    {/* Default to login if route not found */}
     <Route path="*" element={<LoginForm />} />
   </Routes>
 );
 
-// --- Layout for Authenticated Users ---
 const MainLayout = () => {
   const { user } = useSelector((state) => state.auth);
   const isAdminOrStaff = user?.role === 'admin' || user?.role === 'staff';
@@ -57,7 +55,6 @@ export default function App() {
 
   return (
     <Router>
-      {/* ✅ Only render MainLayout if both user & token exist */}
       {user && token ? <MainLayout /> : <AuthLayout />}
       <ToastContainer position="top-center" autoClose={3000} />
     </Router>

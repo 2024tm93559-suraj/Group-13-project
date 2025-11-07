@@ -1,4 +1,3 @@
-// src/components/Equipment.jsx
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -6,11 +5,8 @@ import { fetchEquipment, updateEquipment, deleteEquipment } from '../redux/actio
 import { Button, Card, Col, Row, Spinner, Alert, Form, Modal } from 'react-bootstrap';
 import { PencilSquare, Trash } from 'react-bootstrap-icons';
 import { toast } from 'react-toastify';
-import RequestModal from './RequestModal'; // <-- 1. IMPORT REQUEST MODAL
-
-// ... (EditEquipmentModal component remains unchanged) ...
+import RequestModal from './RequestModal';
 const EditEquipmentModal = ({ show, onHide, item, dispatch, loading }) => {
-  // ... (all the code from your existing file)
   const [formData, setFormData] = useState({
     name: item.name || '',
     category: item.category || '',

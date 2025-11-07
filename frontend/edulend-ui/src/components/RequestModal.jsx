@@ -1,4 +1,3 @@
-// src/components/RequestModal.jsx
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Modal, Button, Form, Spinner, Alert } from 'react-bootstrap';
@@ -25,9 +24,6 @@ const RequestModal = ({ show, onHide, item }) => {
     };
 
     dispatch(createRequest(payload));
-    
-    // We can't check for error here as it's async
-    // A better way would be an effect in this component, but for now:
     toast.success('Request submitted!');
     onHide();
   };
