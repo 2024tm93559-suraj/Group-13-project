@@ -1,4 +1,4 @@
-# EduLend UI – Group 13 Project
+# ResourceHub UI – Group 13 Project
 
 This repository contains the **frontend** of the EduLend Equipment Lending System, developed as part of **Group 13’s project**.  
 The application enables users to manage equipment lending efficiently, including user authentication, equipment management, and data visualization.
