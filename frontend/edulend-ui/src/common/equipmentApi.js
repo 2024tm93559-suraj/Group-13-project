@@ -2,10 +2,14 @@ import { httpRequest } from './connector/http';
 
 const API_PATH = '/api/equipments'; 
 
+const capitalizeFirst = (str) => {
+  if (!str) return '';
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+};
+
 export const EquipmentAPI = {
   /**
    * Fetches all equipment.
-   * @param {string | null} token - The JWT token (optional).
    */
   list: (token) =>
     new Promise(async (resolve, reject) => {
@@ -27,16 +31,15 @@ export const EquipmentAPI = {
 
   /**
    * Creates a new equipment item.
-   * @param {Object} payload - New equipment data.
-   * @param {string} token - The JWT token (must be admin).
    */
   create: (payload, token) =>
     new Promise(async (resolve, reject) => {
       try {
         const client = httpRequest();
+        
         const reqData = {
-          name: payload.name,
-          category: payload.category,
+          name: capitalizeFirst(payload.name),
+          category: capitalizeFirst(payload.category),
           condition: payload.condition,
           quantity: parseInt(payload.quantity, 10),
           available: parseInt(payload.quantity, 10),
@@ -56,27 +59,26 @@ export const EquipmentAPI = {
 
   /**
    * Updates an existing equipment item.
-   * @param {string} id - The ID of the equipment to update.
-   * @param {Object} payload - Equipment data to update.
-   * @param {string} token - The JWT token (must be admin).
    */
   update: (id, payload, token) =>
     new Promise(async (resolve, reject) => {
       try {
         const client = httpRequest();
+        
         const reqData = {
-          name: payload.name,
-          category: payload.category,
+          name: capitalizeFirst(payload.name),
+          category: capitalizeFirst(payload.category),
           condition: payload.condition,
           quantity: parseInt(payload.quantity, 10),
           available: parseInt(payload.available, 10),
         };
         
-        const response = await client.put(`${API_PATH}/${id}`, reqData, {
+        const response = await client.patch(`${API_PATH}/${id}`, reqData, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
+        
         resolve(response.data.data);
       } catch (error) {
         console.error('Update Equipment API Error:', error);
@@ -86,8 +88,6 @@ export const EquipmentAPI = {
 
   /**
    * Deletes an equipment item.
-   * @param {string} id - The ID of the equipment to delete.
-   * @param {string} token - The JWT token (must be admin).
    */
   remove: (id, token) =>
     new Promise(async (resolve, reject) => {

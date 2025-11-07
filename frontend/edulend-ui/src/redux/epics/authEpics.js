@@ -1,4 +1,3 @@
-// src/store/epics/authEpics.js
 import { ofType, combineEpics } from 'redux-observable';
 import { from, of } from 'rxjs';
 import { mergeMap, map, catchError } from 'rxjs/operators';

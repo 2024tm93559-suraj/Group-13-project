@@ -1,4 +1,3 @@
-// src/common/api/authApi.js
 import { httpRequest } from './connector/http';
 import {
   transformRegisterRequest,

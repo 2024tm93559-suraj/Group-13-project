@@ -94,6 +94,7 @@ const AddEquipmentForm = () => {
   });
 
   useEffect(() => {
+    if (user === null) return; // wait for auth load
     if (!user || user.role !== "admin") {
       toast.error("You are not authorized to access this page.");
       navigate("/equipment");
