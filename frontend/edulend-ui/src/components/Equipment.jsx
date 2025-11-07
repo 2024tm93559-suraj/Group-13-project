@@ -5,10 +5,8 @@ import { fetchEquipment, updateEquipment, deleteEquipment } from '../redux/actio
 import { Button, Card, Col, Row, Spinner, Alert, Form, Modal } from 'react-bootstrap';
 import { PencilSquare, Trash } from 'react-bootstrap-icons';
 import { toast } from 'react-toastify';
-
-// --- Edit Modal Component ---
+import RequestModal from './RequestModal';
 const EditEquipmentModal = ({ show, onHide, item, dispatch, loading }) => {
-  
   const [formData, setFormData] = useState({
     name: item.name || '',
     category: item.category || '',
@@ -173,7 +171,6 @@ const EditEquipmentModal = ({ show, onHide, item, dispatch, loading }) => {
   );
 };
 
-
 // --- Main Equipment Component ---
 const Equipment = () => {
   const dispatch = useDispatch();
@@ -187,19 +184,20 @@ const Equipment = () => {
   
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
+
+  // --- 2. ADD STATE FOR REQUEST MODAL ---
+  const [showRequestModal, setShowRequestModal] = useState(false);
   
   const isAdmin = user && user.role === 'admin';
   const isStudent = user && user.role === 'student';
 
   useEffect(() => {
-    if (!token) {
-      navigate('/login');
-    } else {
-      dispatch(fetchEquipment());
-    }
-  }, [dispatch, token, navigate]);
+    // No token check needed here, the epic handles it
+    dispatch(fetchEquipment());
+  }, [dispatch]);
 
-  const getFilteredItems = () => {
+  // ... (getFilteredItems, categories, getStatusBadge, formatCondition, handleShowEdit, handleCloseEdit, handleDelete remain unchanged) ...
+   const getFilteredItems = () => {
     return items
       .filter((item) => {
         return item.name.toLowerCase().includes(searchTerm.toLowerCase());
@@ -258,6 +256,17 @@ const Equipment = () => {
       toast.success('Equipment deleted');
     }
   };
+  
+  // --- 3. ADD HANDLERS FOR REQUEST MODAL ---
+  const handleShowRequest = (item) => {
+    setSelectedItem(item);
+    setShowRequestModal(true);
+  };
+
+  const handleCloseRequest = () => {
+    setShowRequestModal(false);
+    setSelectedItem(null);
+  };
 
   return (
     <>
@@ -269,6 +278,7 @@ const Equipment = () => {
 
       {/* --- Filter Bar --- */}
       <div className="filter-bar">
+        {/* ... (filter bar JSX is unchanged) ... */}
         <Row className="g-3">
           <Col md={4}>
             <Form.Label>Search by Name</Form.Label>
@@ -304,7 +314,8 @@ const Equipment = () => {
         </Row>
       </div>
 
-      {loading && (
+      {/* ... (Loading, Error, and Empty states are unchanged) ... */}
+       {loading && (
         <div className="text-center py-5">
           <Spinner animation="border" role="status">
             <span className="visually-hidden">Loading...</span>
@@ -331,6 +342,7 @@ const Equipment = () => {
         </Alert>
       )}
 
+      {/* --- Equipment List --- */}
       <Row>
         {filteredItems.map((item) => (
           <Col md={6} lg={4} key={item._id} className="mb-4">
@@ -362,11 +374,20 @@ const Equipment = () => {
                   <strong>Quantity:</strong> {item.available} / {item.quantity}
                 </Card.Text>
 
+                {/* --- 4. UPDATE STUDENT BUTTON LOGIC --- */}
                 {isStudent && (
-                  <Button variant="primary" className="w-100 mt-2">
-                    Request to Borrow
+                  <Button
+                    variant="primary"
+                    className="w-100 mt-2"
+                    // Disable button if no items are available or if it needs repair
+                    disabled={item.available === 0 || item.condition === 'needs_repair'}
+                    onClick={() => handleShowRequest(item)}
+                  >
+                    {/* Change text based on availability */}
+                    {item.available === 0 ? 'Unavailable' : (item.condition === 'needs_repair' ? 'In Maintenance' : 'Request to Borrow')}
                   </Button>
                 )}
+                {/* --- END UPDATE --- */}
                 
               </Card.Body>
             </Card>
@@ -374,6 +395,7 @@ const Equipment = () => {
         ))}
       </Row>
       
+      {/* --- Render the Edit Modal --- */}
       {selectedItem && (
         <EditEquipmentModal
           show={showEditModal}
@@ -381,6 +403,15 @@ const Equipment = () => {
           item={selectedItem}
           dispatch={dispatch}
           loading={loading}
+        />
+      )}
+      
+      {/* --- 5. RENDER THE NEW REQUEST MODAL --- */}
+      {selectedItem && (
+        <RequestModal
+          show={showRequestModal}
+          onHide={handleCloseRequest}
+          item={selectedItem}
         />
       )}
     </>

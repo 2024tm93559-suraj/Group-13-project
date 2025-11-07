@@ -1,8 +1,9 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Navbar, Nav, Container, NavDropdown, Button } from 'react-bootstrap';
+import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { logoutUser } from '../redux/actions/authActions';
+
 
 const AppNavbar = () => {
   const dispatch = useDispatch();
@@ -29,9 +30,8 @@ const AppNavbar = () => {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto align-items-center">
             
-            
             {/* Right-aligned dropdown */}
-            <NavDropdown title={user.name || 'Profile'} id="basic-nav-dropdown" align="end">
+            <NavDropdown title={user.name || 'Profile'} id="basic-nav-dropdown" align="end" className="ms-2">
               <NavDropdown.Item onClick={handleLogout}>
                 Logout
               </NavDropdown.Item>
