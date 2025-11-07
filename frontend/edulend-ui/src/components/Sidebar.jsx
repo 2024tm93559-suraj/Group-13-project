@@ -1,7 +1,12 @@
 import React from "react";
 import { Nav } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
-import { HouseDoorFill, PlusSquareFill, BarChartFill ,CardChecklist} from "react-bootstrap-icons";
+import {
+  HouseDoorFill,
+  PlusSquareFill,
+  BarChartFill,
+  CardChecklist,
+} from "react-bootstrap-icons";
 import { useSelector } from "react-redux";
 
 const Sidebar = () => {
@@ -12,9 +17,9 @@ const Sidebar = () => {
   if (!user) {
     return null;
   }
-  
-  const isStaff = user.role === 'staff';
-  const isStudent = user.role === 'student';
+
+  const isStaff = user.role === "staff";
+  const isStudent = user.role === "student";
 
   return (
     <div className="sidebar">
@@ -24,19 +29,18 @@ const Sidebar = () => {
           <HouseDoorFill /> Dashboard
         </Nav.Link>
 
-        
         {isStudent && (
           <Nav.Link as={NavLink} to="/my-requests">
             <CardChecklist /> My Requests
           </Nav.Link>
         )}
-        
+
         {(isAdmin || isStaff) && (
           <Nav.Link as={NavLink} to="/approve-requests">
             <CardChecklist /> Approve Requests
           </Nav.Link>
         )}
-        
+
         {isAdmin && (
           <>
             <Nav.Link as={NavLink} to="/add-equipment">
@@ -44,11 +48,11 @@ const Sidebar = () => {
             </Nav.Link>
 
             {/* 🔹 New Analytics Link */}
-            <Nav.Link as={NavLink} to="/equipment-analytics">
-              <BarChartFill /> Analytics
-            </Nav.Link>
           </>
         )}
+        <Nav.Link as={NavLink} to="/equipment-analytics">
+          <BarChartFill /> Analytics
+        </Nav.Link>
       </Nav>
     </div>
   );
