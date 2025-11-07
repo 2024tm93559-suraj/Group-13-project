@@ -8,6 +8,7 @@ import AppNavbar from "./components/AppNavbar";
 import AddEquipmentForm from "./components/AddEquipmentForm";
 import Sidebar from "./components/Sidebar";
 import { useSelector } from 'react-redux';
+import EquipmentAnalytics from "./components/EquipmentAnalytics";
 
 const AuthLayout = () => (
   <Routes>
@@ -27,6 +28,7 @@ const MainLayout = () => (
           <Route path="/equipment" element={<Equipment />} />
           <Route path="/add-equipment" element={<AddEquipmentForm />} />
           <Route path="*" element={<Equipment />} />
+          <Route path="/equipment-analytics" element={<EquipmentAnalytics />} />
         </Routes>
       </div>
     </div>
