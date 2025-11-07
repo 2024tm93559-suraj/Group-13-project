@@ -9,15 +9,17 @@ import AddEquipmentForm from "./components/AddEquipmentForm";
 import Sidebar from "./components/Sidebar";
 import { useSelector } from "react-redux";
 
+// --- Layout for Login & Signup ---
 const AuthLayout = () => (
   <Routes>
     <Route path="/signup" element={<SignupForm />} />
     <Route path="/login" element={<LoginForm />} />
+    {/* Default to login if route not found */}
     <Route path="*" element={<LoginForm />} />
   </Routes>
 );
 
-
+// --- Layout for Authenticated Users ---
 const MainLayout = () => (
   <div className="app-wrapper d-flex">
     <Sidebar />
@@ -27,6 +29,7 @@ const MainLayout = () => (
         <Routes>
           <Route path="/equipment" element={<Equipment />} />
           <Route path="/add-equipment" element={<AddEquipmentForm />} />
+          {/* Default route inside authenticated area */}
           <Route path="*" element={<Equipment />} />
         </Routes>
       </div>
@@ -34,13 +37,13 @@ const MainLayout = () => (
   </div>
 );
 
-
+// --- Main App Component ---
 export default function App() {
   const { user, token } = useSelector((state) => state.auth);
 
   return (
     <Router>
-    
+      {/* ✅ Only render MainLayout if both user & token exist */}
       {user && token ? <MainLayout /> : <AuthLayout />}
       <ToastContainer position="top-center" autoClose={3000} />
     </Router>
