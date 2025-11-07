@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from "../redux/actions/authActions";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const LoginForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -16,6 +17,11 @@ const LoginForm = () => {
       navigate("/equipment");
     }
   }, [auth.token]);
+  useEffect(() => {
+    if (auth.error) {
+      toast.error("Invalid username or password");
+    }
+  }, [auth.error]);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setCredentials((prev) => ({ ...prev, [name]: value }));
@@ -37,6 +43,7 @@ const LoginForm = () => {
         backgroundPosition: "center",
       }}
     >
+       <ToastContainer position="top-center" />
       <div
         className="card shadow p-4"
         style={{ width: "400px", borderRadius: "15px" }}
