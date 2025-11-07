@@ -7,7 +7,7 @@ import Equipment from "./components/Equipment";
 import AppNavbar from "./components/AppNavbar";
 import AddEquipmentForm from "./components/AddEquipmentForm";
 import Sidebar from "./components/Sidebar";
-import { useSelector } from 'react-redux';
+import { useSelector } from "react-redux";
 
 const AuthLayout = () => (
   <Routes>
@@ -17,12 +17,13 @@ const AuthLayout = () => (
   </Routes>
 );
 
+
 const MainLayout = () => (
-  <div className="app-wrapper">
+  <div className="app-wrapper d-flex">
     <Sidebar />
-    <div className="content-wrapper">
+    <div className="content-wrapper flex-grow-1">
       <AppNavbar />
-      <div className="equipment-dashboard">
+      <div className="equipment-dashboard p-3">
         <Routes>
           <Route path="/equipment" element={<Equipment />} />
           <Route path="/add-equipment" element={<AddEquipmentForm />} />
@@ -33,12 +34,14 @@ const MainLayout = () => (
   </div>
 );
 
+
 export default function App() {
-  const { user } = useSelector((state) => state.auth);
+  const { user, token } = useSelector((state) => state.auth);
 
   return (
     <Router>
-      {user ? <MainLayout /> : <AuthLayout />}
+    
+      {user && token ? <MainLayout /> : <AuthLayout />}
       <ToastContainer position="top-center" autoClose={3000} />
     </Router>
   );

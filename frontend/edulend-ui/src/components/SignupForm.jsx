@@ -3,30 +3,35 @@ import { useDispatch, useSelector } from "react-redux";
 import { loginUser, registerUser } from "../redux/actions/authActions";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+
 const SignupForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const auth = useSelector((state) => state.auth);
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
     role: "",
   });
-  const auth = useSelector((state) => state.auth);
+
+  // ✅ Navigate only when token is present
   useEffect(() => {
-    if (auth.user && auth.token) {
+    if (auth.token) {
       navigate("/equipment");
     }
-  }, [auth.user, auth.token]);
+  }, [auth.token, navigate]);
 
+  // ✅ Auto-login only after signup success (not on every user change)
   useEffect(() => {
-    if (auth.user && !auth.token) {
+    if (auth.success && !auth.token) {
+      toast.success("Signup successful! Logging you in...");
       dispatch(
         loginUser({ email: formData.email, password: formData.password })
       );
-      toast.success("Signup successful! Logging you in...");
     }
-  }, [auth.user]);
+  }, [auth.success, auth.token, dispatch, formData.email, formData.password]);
 
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -58,6 +63,7 @@ const SignupForm = () => {
             onChange={handleChange}
             className="form-control mb-3"
             placeholder="Name"
+            required
           />
           <input
             name="email"
@@ -65,6 +71,8 @@ const SignupForm = () => {
             onChange={handleChange}
             className="form-control mb-3"
             placeholder="Email"
+            type="email"
+            required
           />
           <input
             name="password"
@@ -73,18 +81,22 @@ const SignupForm = () => {
             type="password"
             className="form-control mb-3"
             placeholder="Password"
+            required
           />
           <select
             name="role"
             value={formData.role}
             onChange={handleChange}
             className="form-select mb-3"
+            required
           >
             <option value="">Select Role</option>
             <option value="staff">Staff</option>
             <option value="student">Student</option>
           </select>
-          <button className="btn btn-primary w-100">Sign Up</button>
+          <button className="btn btn-primary w-100" type="submit">
+            Sign Up
+          </button>
         </form>
         <div className="text-center mt-3">
           <Link to="/login">Already have an account? Login</Link>
