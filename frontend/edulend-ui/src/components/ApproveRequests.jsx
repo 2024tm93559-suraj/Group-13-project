@@ -100,7 +100,7 @@ const ApproveRequests = () => {
             )}
             {actionableRequests.map((req) => (
               <tr key={req._id}>
-                <td title={req.user}>{req.user.slice(-6)}...</td>
+                   <td title={req.user}>{req.uname}</td>
                 <td>{req.equipment?.name || 'N/A'}</td>
                 <td style={{width: '120px'}}>{getStatusBadge(req.status)}</td>
                 <td>{req.status === 'issued' || req.status === 'overdue' ? new Date(req.issueDate).toLocaleDateString() : 'N/A'}</td>
